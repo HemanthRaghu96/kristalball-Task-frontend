@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../api/api';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate(); // To handle navigation to the update page
 
   useEffect(() => {
     getUserData();
@@ -25,6 +27,11 @@ const Profile = () => {
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
+  };
+
+  const handleUpdateClick = (id) => {
+
+    navigate(`/profile/${id}`); // Navigate to the update profile page
   };
 
   return (
@@ -58,6 +65,12 @@ const Profile = () => {
               <span className="fw-bold">DOB:</span>
               <span className="ms-2">{user.dob}</span>
             </div>
+            <button 
+              className="btn btn-primary w-100 mt-3" 
+              onClick={()=>handleUpdateClick(user._id)}
+            >
+              Update Profile
+            </button>
           </div>
         </div>
       ) : (
