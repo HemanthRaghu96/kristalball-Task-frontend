@@ -30,21 +30,33 @@ const Profile = () => {
   };
 
   const handleUpdateClick = (id) => {
-
     navigate(`/profile/${id}`); // Navigate to the update profile page
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('login');
+    navigate('/'); // Navigate to home page after logging out
+  };
+
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100">
+    <div className="d-flex flex-column align-items-center min-vh-100">
+      {/* Logout button */}
+      <div className="w-100 d-flex justify-content-end p-3">
+        <button className="btn btn-danger" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+
       {user ? (
-        <div className="card shadow-sm w-100" style={{ maxWidth: '300px' }}>
+        <div className="card shadow-sm w-100 mt-4" style={{ maxWidth: '300px' }}>
           <div className="card-body">
             <h2 className="card-title h5">User Details</h2>
             <div className="mb-2">
               <span className="fw-bold">User Name:</span>
               <span className="ms-2">{user.userName}</span>
             </div>
-            
             <div className="mb-2">
               <span className="fw-bold">Email:</span>
               <span className="ms-2">{user.email}</span>
@@ -67,7 +79,7 @@ const Profile = () => {
             </div>
             <button 
               className="btn btn-primary w-100 mt-3" 
-              onClick={()=>handleUpdateClick(user._id)}
+              onClick={() => handleUpdateClick(user._id)}
             >
               Update Profile
             </button>

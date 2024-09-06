@@ -13,9 +13,10 @@ export default function Login() {
     try {
       const loginData = { email, password };
       const response = await axios.post(`${api}/users/login`, loginData);
-
+console.log(response)
       localStorage.setItem('login', 'true');
       localStorage.setItem('email', email);
+      localStorage.setItem('token', response.data.token);
       setError(false);
 
       if (localStorage.getItem('login') === 'true') {
@@ -52,7 +53,7 @@ export default function Login() {
               </p>
             )}
             <button
-              className="btn btn-warning w-100 my-2"
+              className="btn btn-primary w-100 my-2"
               onClick={handleLogin}
             >
               Login
@@ -63,11 +64,7 @@ export default function Login() {
                 <Link to="/" className="bg-white">Register now</Link>
               </span>
             </p>
-            <div className="d-flex flex-column justify-content-center align-items-center mt-2 bg-white">
-              <p className="fs-6 fw-semibold bg-white">Demo User</p>
-              <p className="fs-6 fw-light bg-white">Email: test@gmail.com</p>
-              <p className="fs-6 fw-light bg-white">Password: 12345678</p>
-            </div>
+            
           </div>
         </div>
       </div>
