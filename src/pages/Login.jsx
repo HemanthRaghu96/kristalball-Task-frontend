@@ -13,7 +13,6 @@ export default function Login() {
     try {
       const loginData = { email, password };
       const response = await axios.post(`${api}/users/login`, loginData);
-console.log(response)
       localStorage.setItem('login', 'true');
       localStorage.setItem('email', email);
       localStorage.setItem('token', response.data.token);

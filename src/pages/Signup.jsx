@@ -30,7 +30,6 @@ export default function Signup() {
       alert("Signup failed.");
     }
   };
-console.log(formData)
   return (
     <main className="login">
       <div className="d-flex flex-column justify-content-center align-items-center vh-100">
