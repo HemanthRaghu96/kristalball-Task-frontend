@@ -1,10 +1,9 @@
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api/api';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const UpdateProfile = () => {
-  const { id } = useParams();
   const [user, setUser] = useState({
     userName: '',
     email: '',
@@ -13,29 +12,28 @@ const UpdateProfile = () => {
     gender: '',
     dob: '',
   });
-  const navigate = useNavigate();
-
+  const { id } = useParams();
+const navigate=useNavigate()
   useEffect(() => {
-    getUserData();
-  }, []);
-
-  const getUserData = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${api}/users/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.data) {
-        setUser(response.data[0]);
+    // Fetch user data when component mounts
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const storedEmail = localStorage.getItem('email')
+    const response = await axios.get(`${api}/users/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const userProfile = response.data.find(user => user.email === storedEmail);
+        setUser(userProfile);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
       }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
+    };
 
+    fetchUserData();
+  }, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -44,6 +42,9 @@ const UpdateProfile = () => {
     });
   };
 
+  const handleCancel = () => {
+    navigate('/profile'); 
+  };
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -62,16 +63,12 @@ const UpdateProfile = () => {
     }
   };
 
-  const handleCancel = () => {
-    navigate('/profile'); // You can modify the route based on where you want to redirect
-  };
-
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100">
       <div className="card shadow-sm w-100" style={{ maxWidth: '400px' }}>
         <div className="card-body">
           <h2 className="card-title h5">Update Profile</h2>
-          <form onSubmit={handleUpdate}>
+          <form onSubmit={(e)=>handleUpdate(e)}>
             <div className="mb-3">
               <label className="form-label fw-bold">User Name</label>
               <input

@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { api } from '../api/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../redux/actions/userActions';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+  const { error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const loginData = { email, password };
-      const response = await axios.post(`${api}/users/login`, loginData);
-      localStorage.setItem('login', 'true');
-      localStorage.setItem('email', email);
-      localStorage.setItem('token', response.data.token);
-      setError(false);
-
+      await dispatch(loginUser(email, password));
+      // Check if login was successful by checking the state or localStorage
       if (localStorage.getItem('login') === 'true') {
         navigate('/profile');
+      } else {
+        // Handle unsuccessful login (e.g., show an error message)
+        console.error('Login failed');
       }
     } catch (error) {
-      console.error(error);
-      setError(true);
+      console.error('An error occurred during login:', error);
     }
   };
-
+  
   return (
     <main className="login">
       <div className="d-flex flex-column justify-content-center align-items-center vh-100">

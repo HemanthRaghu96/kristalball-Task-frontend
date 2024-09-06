@@ -1,43 +1,24 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserProfile, logoutUser } from '../redux/actions/userActions';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api/api';
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate(); // To handle navigation to the update page
-
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+console.log(user)
   useEffect(() => {
-    getUserData();
-  }, []);
+    dispatch(fetchUserProfile());
+  }, [dispatch,user]);
 
-  const getUserData = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const email = localStorage.getItem('email');
-      const response = await axios.get(`${api}/users/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const userData = response.data.find((user) => user.email === email);
-      setUser(userData);
-    
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate('/');
   };
 
   const handleUpdateClick = (id) => {
-    navigate(`/profile/${id}`); // Navigate to the update profile page
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    localStorage.removeItem('login');
-    navigate('/'); // Navigate to home page after logging out
+    navigate(`/profile/${id}`); 
   };
 
   return (

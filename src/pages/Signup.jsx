@@ -16,8 +16,13 @@ export default function Signup() {
   });
   const navigate = useNavigate();
 
+  // Define the handleChange function
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -30,6 +35,7 @@ export default function Signup() {
       alert("Signup failed.");
     }
   };
+
   return (
     <main className="login">
       <div className="d-flex flex-column justify-content-center align-items-center vh-100">
@@ -37,13 +43,13 @@ export default function Signup() {
           <div className="d-flex flex-column p-4 bg-white">
             <h1 className="h4 font-weight-bold text-center">Register</h1>
             <p className="text-muted text-center">to access User Data</p>
-            
+
             <input
               name="userName"
               value={formData.userName}
               onChange={handleChange}
               placeholder="User Name"
-              className="form-control my-2" 
+              className="form-control my-2"
               required
             />
             <input
@@ -62,14 +68,13 @@ export default function Signup() {
               className="form-control my-2"
               required
             />
-          
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
               className="form-control my-2"
             >
-            <option value="">Select Gender</option>
+              <option value="">Select Gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="others">Others</option>
@@ -82,12 +87,11 @@ export default function Signup() {
               className="form-control my-2"
               required
             />
-             <input
+            <input
               name="dob"
               type="date"
               value={formData.dob}
               onChange={handleChange}
-              placeholder="DOB"
               className="form-control my-2"
               required
             />
